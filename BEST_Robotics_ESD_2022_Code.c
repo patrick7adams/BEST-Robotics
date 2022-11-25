@@ -68,7 +68,16 @@ int moveMode = 1; // Movement setting; tank movement is 1, arcade movement is 2.
 int armState = 2; // Field robot center lever states for IR; 1 is rotate, 2 is drive, 3 is lift.
 short ch = 0xAA; // IR character storage.
 
-
+task sensitivity {
+	if(vexRT[Btn6U]) {
+		moveMult = 1;
+		armMult = 1;
+	}
+	if(vexRT[Btn6D]) {
+		moveMult = 0.3;
+		armMult = 0.3;
+	}
+}
 
 task IR { // sends an IR code corresponding to the button pressed.
 	if(vexRT[Btn7L]) { // Sets field robot center lever to rotate.
@@ -132,11 +141,11 @@ task move { // Movement of the robot itself.
 
 task servoSweep { // Pushes the arm servos whenever they are pressed.
 	if(vexRT[Btn5U]) {
-		motor[servoA] = 64;
-		motor[servoB] = 64;
+		motor[servoA] = 127;
+		motor[servoB] = 127;
 	} else {
-		motor[servoB] = -64;
-		motor[servoA] = -64;
+		motor[servoB] = -127;
+		motor[servoA] = -127;
 	}
 } // end task
 
@@ -165,5 +174,6 @@ task main { // Runs all the tasks above.
 		startTask(IR);
 		startTask(servoSweep);
 		startTask(arm);
+		startTask(sensitivity);
 	}
 } // end main
